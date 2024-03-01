@@ -5,9 +5,9 @@ import mysql from "mysql"
 
 const db = mysql.createConnection({
     host: "localhost",
-    user: "jyreen", 
-    password: "UCjyreen-123456", 
-    database: "users", 
+    user: "root", 
+    password: "", 
+    database: "tumabienedb", 
   });
 
   db.connect((err) => {
@@ -31,13 +31,13 @@ const db = mysql.createConnection({
 }
 
 export const findAll = async (): Promise<UnitProduct[]> => {
-    const query = "SELECT * FROM products";
+    const query = "SELECT * FROM product";
     const products = await executeQuery(query, []);
     return products;
 };
 
 export const findOne = async (id: string): Promise<UnitProduct | null> => {
-    const query = "SELECT * FROM products WHERE id = ?";
+    const query = "SELECT * FROM product WHERE id = ?";
     const result = await executeQuery(query, [id]);
     return result.length ? result[0] : null;
 };
@@ -48,7 +48,7 @@ export const create = async (productInfo: Product): Promise<UnitProduct | null> 
         id: id,
         ...productInfo,
     };
-    const query = "INSERT INTO products SET ?";
+    const query = "INSERT INTO product SET ?";
     await executeQuery(query, product);
     return product;
 };
@@ -62,13 +62,13 @@ export const update = async (id: string, updateValues: Product): Promise<UnitPro
         ...updateValues,
     };
 
-    const query = "UPDATE products SET ? WHERE id = ?";
+    const query = "UPDATE product SET ? WHERE id = ?";
     await executeQuery(query, [updatedProduct, id]);
     return updatedProduct;
 };
 
 export const remove = async (id: string): Promise<void> => {
-    const query = "DELETE FROM products WHERE id = ?";
+    const query = "DELETE FROM product WHERE id = ?";
     await executeQuery(query, [id]);
 };
 

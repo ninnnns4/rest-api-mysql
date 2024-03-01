@@ -6,9 +6,9 @@ import mysql from "mysql"
 
 const db = mysql.createConnection({
     host: "localhost",
-    user: "jyreen", 
-    password: "UCjyreen-123456", 
-    database: "users", 
+    user: "root", 
+    password: "", 
+    database: "tumabienedb", 
   });
 
   db.connect((err) => {
@@ -34,7 +34,7 @@ const db = mysql.createConnection({
   function loadUsers(): Promise<Users> {
     return new Promise(async (resolve, reject) => {
       try {
-        const query = "SELECT * FROM users";
+        const query = "SELECT * FROM user";
         const users = await executeQuery(query, []);
         const usersMap: Users = {};
         users.forEach((user: any) => {
@@ -51,12 +51,12 @@ const db = mysql.createConnection({
     return new Promise(async (resolve, reject) => {
       try {
         // For simplicity, you may truncate the table and insert all users again
-        const truncateQuery = "TRUNCATE TABLE users";
+        const truncateQuery = "TRUNCATE TABLE user";
         await executeQuery(truncateQuery, []);
   
         // Insert each user into the database
         const insertPromises = Object.values(users).map((user) => {
-          const insertQuery = "INSERT INTO users SET ?";
+          const insertQuery = "INSERT INTO user SET ?";
           return executeQuery(insertQuery, user);
         });
         await Promise.all(insertPromises);
@@ -70,13 +70,13 @@ const db = mysql.createConnection({
 
 
   export const findAll = async (): Promise<UnitUser[]> => {
-    const query = "SELECT * FROM users";
+    const query = "SELECT * FROM user";
     const users = await executeQuery(query, []);
     return users;
   };
   
   export const findOne = async (id: string): Promise<UnitUser | null> => {
-    const query = "SELECT * FROM users WHERE id = ?";
+    const query = "SELECT * FROM user WHERE id = ?";
     const result = await executeQuery(query, [id]);
     return result.length ? result[0] : null;
   };
@@ -91,7 +91,7 @@ const db = mysql.createConnection({
     email: userData.email,
     password: hashedPassword,
   };
-  const query = "INSERT INTO users SET ?";
+  const query = "INSERT INTO user SET ?";
   await executeQuery(query, user);
   return user;
 };
